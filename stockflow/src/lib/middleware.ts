@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyToken } from './auth'
 
-export function withAuth(handler: (req: NextRequest, user: any) => Promise<NextResponse>) {
-  return async (req: NextRequest): Promise<NextResponse> => {
+export function withAuth(handler: (req: NextRequest, user: any, context?: any) => Promise<NextResponse>) {
+  return async (req: NextRequest, context?: any): Promise<NextResponse> => {
     const authHeader = req.headers.get('authorization')
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -22,6 +22,11 @@ export function withAuth(handler: (req: NextRequest, user: any) => Promise<NextR
       )
     }
     
-    return handler(req, user)
+    // Add user to context for dynamic routes
+    if (context) {
+      context.user = user
+    }
+    
+    return handler(req, user, context)
   }
 }
