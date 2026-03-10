@@ -1,20 +1,18 @@
-'use client'
-
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-
-export default function Home() {
-  const router = useRouter()
-
-  useEffect(() => {
-    router.push('/login')
-  }, [router])
-
+export default function HomePage() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900">StockFlow</h1>
-        <p className="mt-2 text-gray-600">Redirecting to login...</p>
+    <div style={{ padding: '50px', textAlign: 'center' }}>
+      <h1>🎉 StockFlow MVP</h1>
+      <p>Inventory Management System</p>
+      <div style={{ marginTop: '30px' }}>
+        <a href="/login" style={{ 
+          padding: '12px 24px', 
+          background: '#4f46e5', 
+          color: 'white', 
+          textDecoration: 'none',
+          borderRadius: '6px'
+        }}>
+          Get Started
+        </a>
       </div>
     </div>
   )
