@@ -9,3 +9,6 @@ cmds = ["echo 'No build step required for Node.js'"]
 
 [start]
 cmd = "npm start"
+
+[variables]
+NODE_ENV = "production"

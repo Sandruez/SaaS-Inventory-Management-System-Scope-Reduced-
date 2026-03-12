@@ -2,10 +2,10 @@
   "name": "stockflow-mvp",
   "version": "1.0.0",
   "description": "StockFlow MVP - SaaS Inventory Management System",
-  "main": "production-server.js",
+  "main": "railway-server.js",
   "scripts": {
-    "start": "node production-server.js",
-    "dev": "nodemon production-server.js",
+    "start": "node railway-server.js",
+    "dev": "node simple-server.js",
     "build": "echo 'No build step required for Node.js'",
     "migrate": "node scripts/migrate.js",
     "seed": "node scripts/seed.js"

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset StockFlow Data</title>
+    <script src="https://cdn.tailwindcss.com/3.4.1"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {}
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6 text-red-600">🧹 Reset StockFlow Data</h1>
+        
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4 text-red-600">⚠️ WARNING</h2>
+            <p class="text-gray-700 mb-4">
+                This will delete ALL data including:
+            </p>
+            <ul class="list-disc list-inside text-gray-700 mb-4">
+                <li>All organizations</li>
+                <li>All user accounts</li>
+                <li>All products</li>
+                <li>All settings</li>
+            </ul>
+            <p class="text-red-600 font-bold mb-4">
+                THIS ACTION CANNOT BE UNDO!
+            </p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">Reset Options</h2>
+            
+            <div class="mb-4">
+                <button onclick="resetLocalStorage()" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mr-2">
+                    🧹 Clear Local Storage Only
+                </button>
+                <button onclick="resetAll()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                    🗑️ Reset Everything
+                </button>
+            </div>
+            
+            <div id="resetResult" class="mt-4 p-4 bg-gray-100 rounded"></div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold mb-4">Current Status</h2>
+            <div id="currentStatus" class="text-sm text-gray-600">
+                Checking current data...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Clear local storage
+        function resetLocalStorage() {
+            const resultDiv = document.getElementById('resetResult');
+            
+            try {
+                // Clear all app data from localStorage
+                localStorage.removeItem('stockflow_token');
+                localStorage.removeItem('stockflow_user');
+                localStorage.removeItem('stockflow_org');
+                localStorage.removeItem('stockflow_settings');
+                
+                // Also clear any other localStorage items
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.includes('stockflow')) {
+                        localStorage.removeItem(key);
+                    }
+                }
+                
+                resultDiv.innerHTML = `
+                    <div class="text-green-600">
+                        <h3 class="font-bold">✅ Local Storage Cleared!</h3>
+                        <p>All local data has been removed from your browser.</p>
+                        <p>You can now sign up with a fresh account.</p>
+                    </div>
+                `;
+                
+                updateStatus();
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="text-red-600">
+                        <h3 class="font-bold">❌ Error</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Reset everything (if database was available)
+        function resetAll() {
+            const resultDiv = document.getElementById('resetResult');
+            
+            resultDiv.innerHTML = '<p class="text-blue-600">🔄 Resetting everything...</p>';
+            
+            // Clear local storage first
+            resetLocalStorage();
+            
+            // Note: Database reset would require backend endpoint
+            setTimeout(() => {
+                resultDiv.innerHTML += `
+                    <div class="text-yellow-600 mt-4">
+                        <h3 class="font-bold">⚠️ Database Reset</h3>
+                        <p>Local storage cleared successfully.</p>
+                        <p>Database reset requires PostgreSQL to be running locally.</p>
+                        <p>For now, you can create a fresh account locally.</p>
+                    </div>
+                `;
+            }, 1000);
+        }
+
+        // Update status
+        function updateStatus() {
+            const statusDiv = document.getElementById('currentStatus');
+            
+            const hasToken = localStorage.getItem('stockflow_token');
+            const hasUser = localStorage.getItem('stockflow_user');
+            const hasOrg = localStorage.getItem('stockflow_org');
+            
+            statusDiv.innerHTML = `
+                <div class="space-y-2">
+                    <p><strong>Local Storage Status:</strong></p>
+                    <p>🔑 Token: ${hasToken ? 'Found' : 'None'}</p>
+                    <p>👤 User: ${hasUser ? 'Found' : 'None'}</p>
+                    <p>🏢 Organization: ${hasOrg ? 'Found' : 'None'}</p>
+                    <p class="mt-4 text-sm text-gray-500">
+                        ${hasToken ? 'You are currently logged in locally.' : 'You are not logged in locally.'}
+                    </p>
+                </div>
+            `;
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            updateStatus();
+        };
+    </script>
+</body>
+</html>
