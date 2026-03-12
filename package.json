@@ -1,6 +1,6 @@
 {
   "name": "stockflow-mvp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "StockFlow MVP - SaaS Inventory Management System",
   "main": "railway-server-fixed.js",
   "scripts": {
