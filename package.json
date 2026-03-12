@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node railway-server.js",
     "dev": "node simple-server.js",
-    "build": "echo 'No build step required for Node.js'",
+    "build": "npm run build-css-prod",
+    "build-css": "tailwindcss -i ./public/styles.css -o ./public/output.css --watch",
+    "build-css-prod": "tailwindcss -i ./public/styles.css -o ./public/output.css --minify",
     "migrate": "node scripts/migrate.js",
     "seed": "node scripts/seed.js"
   },
@@ -18,14 +20,18 @@
     "pg": "^8.11.3",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
+    "joi": "^17.9.2",
     "cors": "^2.8.5",
-    "helmet": "^7.1.0",
+    "helmet": "^7.0.0",
     "compression": "^1.7.4",
-    "rate-limiter-flexible": "^4.0.1",
-    "joi": "^17.11.0",
+    "rate-limiter-flexible": "^2.4.2",
+    "axios": "^1.5.0",
     "dotenv": "^16.3.1"
   },
   "devDependencies": {
+    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
     "nodemon": "^3.0.2"
   },
   "engines": {
