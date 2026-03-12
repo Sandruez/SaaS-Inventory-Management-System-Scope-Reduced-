@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Test - StockFlow</title>
+    <script src="https://cdn.tailwindcss.com/3.4.1"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {}
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">🔧 Backend Connection Test</h1>
+        
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">API Health Check</h2>
+            <button onclick="testHealth()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Test Health Endpoint
+            </button>
+            <div id="healthResult" class="mt-4 p-4 bg-gray-100 rounded"></div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">Backend Status</h2>
+            <div id="backendStatus" class="text-gray-600">
+                Click "Test Health Endpoint" to check backend connection
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold mb-4">Environment Info</h2>
+            <div id="envInfo" class="text-sm text-gray-600">
+                API Base: <span id="apiBase"></span><br>
+                Current URL: <span id="currentUrl"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show environment info
+        document.getElementById('apiBase').textContent = window.location.origin;
+        document.getElementById('currentUrl').textContent = window.location.href;
+
+        // Test backend health
+        async function testHealth() {
+            const resultDiv = document.getElementById('healthResult');
+            const statusDiv = document.getElementById('backendStatus');
+            
+            resultDiv.innerHTML = '<p class="text-blue-600">🔄 Testing backend connection...</p>';
+            
+            try {
+                const response = await axios.get('/health');
+                resultDiv.innerHTML = `
+                    <div class="text-green-600">
+                        <h3 class="font-bold">✅ Backend is Working!</h3>
+                        <p>Status: ${response.data.status}</p>
+                        <p>Timestamp: ${response.data.timestamp}</p>
+                        <p>Response Time: ${new Date().toLocaleString()}</p>
+                    </div>
+                `;
+                statusDiv.innerHTML = `
+                    <div class="text-green-600 font-semibold">✅ Backend Connected Successfully</div>
+                    <div class="text-sm mt-2">
+                        <strong>Health Endpoint:</strong> /health<br>
+                        <strong>Response:</strong> ${JSON.stringify(response.data, null, 2)}
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="text-red-600">
+                        <h3 class="font-bold">❌ Backend Connection Failed</h3>
+                        <p>Error: ${error.message}</p>
+                        <p>This means the backend server is not running or not accessible</p>
+                    </div>
+                `;
+                statusDiv.innerHTML = `
+                    <div class="text-red-600 font-semibold">❌ Backend Not Connected</div>
+                    <div class="text-sm mt-2">
+                        <strong>Possible Issues:</strong><br>
+                        • Backend server not started<br>
+                        • CORS issues<br>
+                        • Wrong port<br>
+                        • Network connectivity issues
+                    </div>
+                `;
+            }
+        }
+
+        // Auto-test on page load
+        window.onload = function() {
+            setTimeout(testHealth, 1000);
+        };
+    </script>
+</body>
+</html>
