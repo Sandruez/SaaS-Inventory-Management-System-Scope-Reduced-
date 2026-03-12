@@ -29,8 +29,8 @@ app.get('/health', (req, res) => {
 
 // Serve main HTML file
 app.get('/', (req, res) => {
-  console.log('📱 Serving index.html');
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  console.log('📱 Serving index-minimal.html');
+  res.sendFile(path.join(__dirname, 'public', 'index-minimal.html'));
 });
 
 // Debug endpoint to check files
