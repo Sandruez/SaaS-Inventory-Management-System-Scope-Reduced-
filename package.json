@@ -2,9 +2,9 @@
   "name": "stockflow-mvp",
   "version": "1.0.0",
   "description": "StockFlow MVP - SaaS Inventory Management System",
-  "main": "railway-server.js",
+  "main": "railway-server-fixed.js",
   "scripts": {
-    "start": "node railway-server.js",
+    "start": "node railway-server-fixed.js",
     "dev": "node simple-server.js",
     "build": "npm run build-css-prod",
     "build-css": "tailwindcss -i ./public/styles.css -o ./public/output.css --watch",
