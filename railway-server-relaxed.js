@@ -17,26 +17,9 @@ const rateLimiter = new RateLimiterMemory({
   duration: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 900000, // 15 minutes
 });
 
-// Middleware
+// Middleware - RELAXED CSP for maximum compatibility
 app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-hashes'"],
-      scriptSrcAttr: ["'self'", "'unsafe-inline'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:", "https:"],
-      fontSrc: ["'self'", "https:"],
-      connectSrc: ["'self'"],
-      mediaSrc: ["'self'"],
-      objectSrc: ["'none'"],
-      childSrc: ["'self'"],
-      frameSrc: ["'self'"],
-      workerSrc: ["'self'"],
-      manifestSrc: ["'self'"],
-      upgradeInsecureRequests: []
-    }
-  }
+  contentSecurityPolicy: false // Disable CSP completely for Railway deployment
 }));
 app.use(compression());
 app.use(cors({
@@ -340,8 +323,8 @@ app.get('/output.css', (req, res) => {
 .underline{text-decoration-line:underline}
 .opacity-50{opacity:.5}
 .opacity-75{opacity:.75}
-.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0/.1),0 1px 2px -1px rgb(0 0 0/.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}
-.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0/.1),0 2px 4px -2px rgb(0 0 0/.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color),0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}
+.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0/.1),0 1px 2px -1px rgb(0 0 0/.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow,0 0 #0000)}
+.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0/.1),0 2px 4px -2px rgb(0 0 0/.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color),0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow,0 0 #0000)}
 .rounded{border-radius:.25rem}
 .rounded-md{border-radius:.375rem}
 .rounded-lg{border-radius:.5rem}
@@ -604,11 +587,12 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 StockFlow Railway Server running on port ${PORT}`);
+  console.log(`🚀 StockFlow Railway Server (RELAXED CSP) running on port ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 URL: ${process.env.RAILWAY_PUBLIC_URL || `http://localhost:${PORT}`}`);
   console.log(`🔍 Health check: ${process.env.RAILWAY_PUBLIC_URL || `http://localhost:${PORT}`}/health`);
   console.log(`🎨 CSS endpoint: ${process.env.RAILWAY_PUBLIC_URL || `http://localhost:${PORT}`}/output.css`);
+  console.log(`🛡️ CSP: DISABLED for maximum compatibility`);
 });
 
 // Handle graceful shutdown
